@@ -1,0 +1,18 @@
+#!upstart
+#description "hello_service startup"
+
+respawn
+
+start on (local-filesystems
+  and net-device-up IFACE!=lo
+  and mounted MOUNTPOINT=/vagrant)
+
+stop on shutdown
+
+setuid vagrant
+setgid vagrant
+
+script
+  cd /vagrant/source/hello_service
+  node server <%= node.hello_service.port_number %>
+end script
